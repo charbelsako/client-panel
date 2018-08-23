@@ -16,25 +16,82 @@ class ClientDetails extends Component {
     firestore: PropTypes.object.isRequired,
   }
 
+  state = {
+    showBalanceUpdate: false,
+    balanceUpdateAmount: '',
+  }
+
+  onChange = e => this.setState({ [e.target.name]: e.target.value })
+
+  balanceSubmit = e => {
+    e.preventDefault()
+
+    const { client, firestore } = this.props
+    const { balanceUpdateAmount } = this.state
+    //What to update
+    const clientUpdate = {
+      balance: parseFloat(balanceUpdateAmount),
+    }
+    //update the database
+    firestore.update({ collection: 'clients', doc: client.id }, clientUpdate)
+  }
+
+  onDeleteClick = () => {
+    //Add a toast as a notification
+    const { client, firestore, history } = this.props
+    firestore
+      .delete({ collection: 'clients', doc: client.id })
+      .then(history.push('/'))
+  }
+
   render() {
     const { client } = this.props
+    const { showBalanceUpdate, balanceUpdateAmount } = this.state
+
+    let balanceForm = ''
+    if (showBalanceUpdate) {
+      balanceForm = (
+        <form onSubmit={this.balanceSubmit}>
+          <div className="input-group">
+            <input
+              type="text"
+              className="form-control"
+              name="balanceUpdateAmount"
+              placeholder="Enter Balance"
+              value={balanceUpdateAmount}
+              onChange={this.onChange}
+            />
+            <div className="input-group-append">
+              <input
+                type="submit"
+                value="Update"
+                className="btn btn-outline-dark"
+              />
+            </div>
+          </div>
+        </form>
+      )
+    } else {
+      balanceForm = ''
+    }
 
     if (client) {
       return (
         <div>
           <div className="row">
-            <div className="col-md-6">
+            <div className="col-md-6 col-sm-6 col-6">
               <Link to="/" className="btn btn-link">
                 <i className="fas fa-arrow-circle-left" /> Back to Dashboard
               </Link>
             </div>
-            <div className="col-md-6">
+            <div className="col-md-6 col-sm-6 col-6">
               <div className="btn-group float-right">
                 <Link to={`/client/edit/${client.id}`} className="btn btn-dark">
                   Edit
                 </Link>
-
-                <button className="btn btn-danger">Delete</button>
+                <button onClick={this.onDeleteClick} className="btn btn-danger">
+                  Delete
+                </button>
               </div>
             </div>
           </div>
@@ -45,14 +102,14 @@ class ClientDetails extends Component {
             </div>
             <div className="card-body">
               <div className="row">
-                <div className="col-md-8 col-sm-6">
-                  <h4>
+                <div className="col-md-8 col-sm-12 col-12">
+                  <h5>
                     Client ID:{' '}
                     <span className="text-secondary">{client.id}</span>
-                  </h4>
+                  </h5>
                 </div>
-                <div className="col-md-4 col-sm-6">
-                  <h3 className="pull-right">
+                <div className="col-md-4 col-sm-12">
+                  <h4 className="pull-right">
                     Balance:
                     <span
                       className={classnames({
@@ -63,8 +120,21 @@ class ClientDetails extends Component {
                       {' '}
                       ${parseFloat(client.balance).toFixed(2)}{' '}
                     </span>
-                  </h3>
-                  {/* TODO BALANCE FORM */}
+                    <small>
+                      <a
+                        href="#!"
+                        onClick={() =>
+                          this.setState({
+                            showBalanceUpdate: !this.state.showBalanceUpdate,
+                          })
+                        }
+                      >
+                        <i className="fas fa-pencil-alt" />
+                      </a>
+                    </small>
+                  </h4>
+                  {/* BALANCE FORM */}
+                  {balanceForm}
                 </div>
               </div>
               <hr />

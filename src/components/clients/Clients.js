@@ -57,11 +57,11 @@ class Clients extends Component {
             </div>
           </div>
 
-          <table className="table table-striped">
-            <thead className="thead-inverse">
+          <table className="table table-hover table-bordered">
+            <thead className="thead-dark">
               <tr>
                 <th>Name</th>
-                <th>Email</th>
+                {/* <th>Email</th> */}
                 <th>Balance</th>
                 <th />
               </tr>
@@ -72,12 +72,12 @@ class Clients extends Component {
                   <td>
                     {client.firstname} {client.lastname}
                   </td>
-                  <td>{client.email}</td>
+                  {/* <td>{client.email}</td> */}
                   <td>
                     <span
                       className={classnames({
                         'text-danger': client.balance > '0',
-                        'text-success': client.balance === '0',
+                        'text-success': client.balance === 0,
                       })}
                     >
                       $ {parseFloat(client.balance).toFixed(2)}
