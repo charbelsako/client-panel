@@ -1,18 +1,19 @@
-import React, { Component } from 'react'
+import React, { Component } from "react"
 
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import './App.css'
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
+import "./App.css"
 
 //Store
-import { Provider } from 'react-redux'
-import store from './store'
+import { Provider } from "react-redux"
+import store from "./store"
 
 //Custom Components
-import AppNavbar from './components/layout/AppNavbar'
-import Dashboard from './components/layout/Dashboard'
-import AddClient from './components/clients/AddClient'
-import ClientDetails from './components/clients/ClientDetails'
-import EditClient from './components/clients/EditClient'
+import AppNavbar from "./components/layout/AppNavbar"
+import Dashboard from "./components/layout/Dashboard"
+import AddClient from "./components/clients/AddClient"
+import ClientDetails from "./components/clients/ClientDetails"
+import EditClient from "./components/clients/EditClient"
+import Login from "./components/auth/Login"
 
 class App extends Component {
   render() {
@@ -27,6 +28,7 @@ class App extends Component {
                 <Route exact path="/client/add" component={AddClient} />
                 <Route exact path="/client/:id" component={ClientDetails} />
                 <Route exact path="/client/edit/:id" component={EditClient} />
+                <Route exact path="/login" component={Login} />
               </Switch>
             </div>
           </div>
