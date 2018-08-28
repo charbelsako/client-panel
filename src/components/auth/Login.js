@@ -30,7 +30,7 @@ class Login extends Component {
   render() {
     return (
       <div className="row">
-        <div className="col-md-6 mx-auto">
+        <div className="col-md-8 col-sm-12 col-xs-12 col-lg-6 mx-auto mt-auto">
           <div className="card">
             <div className="card-body">
               <h1 className="text-center pb-4 pt-3">
