@@ -24,13 +24,14 @@ class Login extends Component {
     e.preventDefault()
     const { email, password } = this.state
     const { firebase } = this.props
+    //Todo Add STATE and output "Invalid" Login onto the login form
     firebase.login({ email, password }).catch(err => alert('invalid login'))
   }
 
   render() {
     return (
       <div className="row">
-        <div className="col-md-8 col-sm-12 col-xs-12 col-lg-6 mx-auto mt-auto">
+        <div className="col-md-8 col-sm-12 col-xs-12 col-lg-6 mx-auto">
           <div className="card">
             <div className="card-body">
               <h1 className="text-center pb-4 pt-3">
