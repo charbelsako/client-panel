@@ -1,8 +1,10 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-// import { compose } from "redux"
-// import { connect } from "react-redux"
-import { firebaseConnect } from 'react-redux-firebase'
+import React, { Component } from "react"
+import PropTypes from "prop-types"
+import { compose } from "redux"
+import { connect } from "react-redux"
+import { notifyUser } from "../../actions/notifyActions"
+import { firebaseConnect } from "react-redux-firebase"
+import Alert from "../layout/Alert"
 
 class Login extends Component {
   static propTypes = {
@@ -10,8 +12,8 @@ class Login extends Component {
   }
 
   state = {
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   }
 
   onChange = e => {
@@ -23,12 +25,15 @@ class Login extends Component {
   onSubmit = e => {
     e.preventDefault()
     const { email, password } = this.state
-    const { firebase } = this.props
+    const { firebase, notifyUser } = this.props
     //Todo Add STATE and output "Invalid" Login onto the login form
-    firebase.login({ email, password }).catch(err => alert('invalid login'))
+    firebase
+      .login({ email, password })
+      .catch(err => notifyUser("invalid login", "danger"))
   }
 
   render() {
+    const { message, messageType } = this.props.notify
     return (
       <div className="row">
         <div className="col-md-8 col-sm-12 col-xs-12 col-lg-6 mx-auto">
@@ -39,6 +44,9 @@ class Login extends Component {
                   <i className="fas fa-lock" /> Login
                 </span>
               </h1>
+              {message ? (
+                <Alert message={message} messageType={messageType} />
+              ) : null}
               <form onSubmit={this.onSubmit}>
                 <div className="form-group">
                   <label htmlFor="email">Email</label>
@@ -76,4 +84,14 @@ class Login extends Component {
   }
 }
 
-export default firebaseConnect()(Login)
+export default compose(
+  firebaseConnect({}),
+  connect(
+    (state, props) => ({
+      notify: state.notify,
+    }),
+    { notifyUser },
+  ),
+)(Login)
+
+firebaseConnect()(Login)

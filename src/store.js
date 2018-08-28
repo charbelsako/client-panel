@@ -1,20 +1,22 @@
-import { createStore, compose, combineReducers } from 'redux'
-import firebase from 'firebase'
-import 'firebase/firestore'
-import { reactReduxFirebase, firebaseReducer } from 'react-redux-firebase'
-import { reduxFirestore, firestoreReducer } from 'redux-firestore'
+import { createStore, compose, combineReducers } from "redux"
+import firebase from "firebase"
+import "firebase/firestore"
+import { reactReduxFirebase, firebaseReducer } from "react-redux-firebase"
+import { reduxFirestore, firestoreReducer } from "redux-firestore"
+import notifyReducer from "./reducers/notifyReducer"
+import settingsReducer from "./reducers/settingsReducer"
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyDpe-uIEia7SiyqbhGY-zGY_ydPqpijzoY',
-  authDomain: 'react-client-panel-1e6bd.firebaseapp.com',
-  databaseURL: 'https://react-client-panel-1e6bd.firebaseio.com',
-  projectId: 'react-client-panel-1e6bd',
-  storageBucket: 'react-client-panel-1e6bd.appspot.com',
-  messagingSenderId: '248590649918',
+  apiKey: "AIzaSyDpe-uIEia7SiyqbhGY-zGY_ydPqpijzoY",
+  authDomain: "react-client-panel-1e6bd.firebaseapp.com",
+  databaseURL: "https://react-client-panel-1e6bd.firebaseio.com",
+  projectId: "react-client-panel-1e6bd",
+  storageBucket: "react-client-panel-1e6bd.appspot.com",
+  messagingSenderId: "248590649918",
 }
 
 // React Redux Firebase
-const rrfconfig = { userProfile: 'users', useFirestoreForProfile: true }
+const rrfconfig = { userProfile: "users", useFirestoreForProfile: true }
 
 //Firebase Initialization
 firebase.initializeApp(firebaseConfig)
@@ -32,6 +34,7 @@ const createStoreWithFirebase = compose(
 const rootReducer = combineReducers({
   firebase: firebaseReducer,
   firestore: firestoreReducer,
+  notify: notifyReducer,
 })
 
 const initialState = {}
