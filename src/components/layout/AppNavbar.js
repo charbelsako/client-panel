@@ -1,9 +1,9 @@
-import React, { Component } from "react"
-import { Link } from "react-router-dom"
-import PropTypes from "prop-types"
-import { compose } from "redux"
-import { connect } from "react-redux"
-import { firebaseConnect } from "react-redux-firebase"
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import { compose } from 'redux'
+import { connect } from 'react-redux'
+import { firebaseConnect } from 'react-redux-firebase'
 
 class AppNavbar extends Component {
   static propTypes = {
@@ -26,6 +26,7 @@ class AppNavbar extends Component {
     if (auth.uid) {
       return { isAuthenticated: true }
     } else {
+      return { isAuthenticated: false }
     }
   }
 

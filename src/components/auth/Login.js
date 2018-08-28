@@ -1,8 +1,8 @@
-import React, { Component } from "react"
-import PropTypes from "prop-types"
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 // import { compose } from "redux"
 // import { connect } from "react-redux"
-import { firebaseConnect } from "react-redux-firebase"
+import { firebaseConnect } from 'react-redux-firebase'
 
 class Login extends Component {
   static propTypes = {
@@ -10,8 +10,8 @@ class Login extends Component {
   }
 
   state = {
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   }
 
   onChange = e => {
@@ -24,7 +24,7 @@ class Login extends Component {
     e.preventDefault()
     const { email, password } = this.state
     const { firebase } = this.props
-    firebase.login({ email, password }).catch(err => alert("invalid login"))
+    firebase.login({ email, password }).catch(err => alert('invalid login'))
   }
 
   render() {
@@ -35,9 +35,8 @@ class Login extends Component {
             <div className="card-body">
               <h1 className="text-center pb-4 pt-3">
                 <span className="text-primary">
-                  <i className="fas fa-lock" />
-                </span>{" "}
-                Login
+                  <i className="fas fa-lock" /> Login
+                </span>
               </h1>
               <form onSubmit={this.onSubmit}>
                 <div className="form-group">
