@@ -1,0 +1,12 @@
+[debug] [2018-08-29T20:50:26.094Z] ----------------------------------------------------------------------
+[debug] [2018-08-29T20:50:26.098Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\SARKIS\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase deploy
+[debug] [2018-08-29T20:50:26.098Z] CLI Version:   4.2.1
+[debug] [2018-08-29T20:50:26.098Z] Platform:      win32
+[debug] [2018-08-29T20:50:26.099Z] Node Version:  v10.9.0
+[debug] [2018-08-29T20:50:26.100Z] Time:          Wed Aug 29 2018 23:50:26 GMT+0300 (Israel Daylight Time)
+[debug] [2018-08-29T20:50:26.100Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-08-29T20:50:26.115Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-08-29T20:50:26.116Z] > authorizing via signed-in user
+[debug] [2018-08-29T20:50:26.119Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/react-client-panel-1e6bd  
+ 
