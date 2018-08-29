@@ -1,33 +1,46 @@
 import {
   DISABLE_BALANCE_ON_EDIT,
-  DISABLE_BALANCE_ON_EDIT,
   ALLOW_REGISTRATION,
-} from "../actions/types"
+  DISABLE_BALANCE_ON_ADD,
+} from './types'
 
-const initialState = {
-  disableBalanceOnAdd: true,
-  disableBalanceOnEdit: false,
-  allowRegistration: true,
+export const setDisableBalanceOnAdd = () => {
+  //Get setting from localStorage
+  const settings = JSON.parse(localStorage.getItem('settings'))
+  //Toggle value
+  settings.disableBalanceOnAdd = !settings.disableBalanceOnAdd
+  //Update local storage
+  localStorage.setItem('settings', JSON.stringify(settings))
+  return {
+    type: DISABLE_BALANCE_ON_ADD,
+    payload: settings.disableBalanceOnAdd,
+  }
 }
 
-export default function(state = initialState, action) {
-  switch (action.type) {
-    case DISABLE_BALANCE_ON_ADD:
-      return {
-        ...state,
-        disableBalanceOnAdd: !state.disableBalanceOnAdd,
-      }
-    case DISABLE_BALANCE_ON_EDIT:
-      return {
-        ...state,
-        disableBalanceOnEdit: !state.disableBalanceOnEdit,
-      }
-    case ALLOW_REGISTRATION:
-      return {
-        ...state,
-        allowRegistration: !state.allowRegistration,
-      }
-    default:
-      return state
+export const setAllowRegistration = () => {
+  //Get setting from localStorage
+  const settings = JSON.parse(localStorage.getItem('settings'))
+  //Toggle value
+  settings.allowRegistration = !settings.allowRegistration
+  //Update local storage
+  localStorage.setItem('settings', JSON.stringify(settings))
+
+  return {
+    type: ALLOW_REGISTRATION,
+    payload: settings.allowRegistration,
+  }
+}
+
+export const setDisableBalanceOnEdit = () => {
+  //Get setting from localStorage
+  const settings = JSON.parse(localStorage.getItem('settings'))
+  //Toggle value
+  settings.disableBalanceOnEdit = !settings.disableBalanceOnEdit
+  //Update local storage
+  localStorage.setItem('settings', JSON.stringify(settings))
+
+  return {
+    type: DISABLE_BALANCE_ON_EDIT,
+    payload: settings.disableBalanceOnEdit,
   }
 }

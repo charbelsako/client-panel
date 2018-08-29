@@ -6,7 +6,7 @@ import { notifyUser } from '../../actions/notifyActions'
 import { firebaseConnect } from 'react-redux-firebase'
 import Alert from '../layout/Alert'
 
-class Login extends Component {
+class Register extends Component {
   static propTypes = {
     firebase: PropTypes.object.isRequired,
     notify: PropTypes.object.isRequired,
@@ -28,10 +28,21 @@ class Login extends Component {
     e.preventDefault()
     const { email, password } = this.state
     const { firebase, notifyUser } = this.props
-    //Todo Add STATE and output "Invalid" Login onto the login form
+
+    //Register User
     firebase
-      .login({ email, password })
-      .catch(err => notifyUser('invalid login', 'danger'))
+      .createUser({ email, password })
+      .catch(err => notifyUser('That user already exists', 'danger'))
+    // firebase
+    //   .login({ email, password })
+    //   .catch(err => notifyUser('invalid login', 'danger'))
+  }
+
+  componentWillMount() {
+    const { allowRegistration } = this.props.settings
+    if (!allowRegistration) {
+      this.props.history.push('/')
+    }
   }
 
   render() {
@@ -43,7 +54,7 @@ class Login extends Component {
             <div className="card-body">
               <h1 className="text-center pb-4 pt-3">
                 <span className="text-primary">
-                  <i className="fas fa-lock" /> Login
+                  <i className="fas fa-lock" /> Register
                 </span>
               </h1>
               {message ? (
@@ -74,7 +85,7 @@ class Login extends Component {
                 </div>
                 <input
                   type="submit"
-                  value="Login"
+                  value="Register"
                   className="btn btn-primary btn-block"
                 />
               </form>
@@ -91,9 +102,8 @@ export default compose(
   connect(
     (state, props) => ({
       notify: state.notify,
+      settings: state.settings,
     }),
     { notifyUser },
   ),
-)(Login)
-
-firebaseConnect()(Login)
+)(Register)
