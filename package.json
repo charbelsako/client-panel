@@ -1,6 +1,7 @@
 {
   "name": "client-panel",
   "version": "0.1.0",
+  "homepage": "https://charbelsako.github.io/client-panel",
   "private": true,
   "dependencies": {
     "classnames": "^2.2.6",
