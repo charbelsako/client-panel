@@ -13,7 +13,7 @@ const firebaseConfig = {
   databaseURL: 'https://react-client-panel-1e6bd.firebaseio.com',
   projectId: 'react-client-panel-1e6bd',
   storageBucket: 'react-client-panel-1e6bd.appspot.com',
-  messagingSenderId: '485531386544',
+  messagingSenderId: '248590649918',
 };
 
 // react-redux-firebase config
