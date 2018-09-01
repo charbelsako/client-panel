@@ -1,22 +1,22 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import { UserIsAuthenticated, UserIsNotAuthenticated } from './helpers/auth'
-import './App.css'
+import { HashRouter as Router, Switch, Route } from 'react-router-dom';
+import { UserIsAuthenticated, UserIsNotAuthenticated } from './helpers/auth';
+import './App.css';
 
 //Store
-import { Provider } from 'react-redux'
-import store from './store'
+import { Provider } from 'react-redux';
+import store from './store';
 
 //Custom Components
-import AppNavbar from './components/layout/AppNavbar'
-import Dashboard from './components/layout/Dashboard'
-import AddClient from './components/clients/AddClient'
-import ClientDetails from './components/clients/ClientDetails'
-import EditClient from './components/clients/EditClient'
-import Login from './components/auth/Login'
-import Register from './components/auth/Register'
-import Settings from './components/settings/Settings'
+import AppNavbar from './components/layout/AppNavbar';
+import Dashboard from './components/layout/Dashboard';
+import AddClient from './components/clients/AddClient';
+import ClientDetails from './components/clients/ClientDetails';
+import EditClient from './components/clients/EditClient';
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
+import Settings from './components/settings/Settings';
 
 class App extends Component {
   render() {
@@ -67,8 +67,8 @@ class App extends Component {
           </div>
         </Router>
       </Provider>
-    )
+    );
   }
 }
 
-export default App
+export default App;
