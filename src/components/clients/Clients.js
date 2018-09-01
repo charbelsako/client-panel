@@ -8,8 +8,15 @@ import Spinner from '../layout/Spinner';
 
 class Clients extends Component {
   state = {
-    totalOwed: null
+    totalOwed: null,
   };
+
+  componentDidMount() {
+    this.props.firestore.get({
+      collection: 'clients',
+      where: ['owner', '==', this.props.uid],
+    });
+  }
 
   static getDerivedStateFromProps(props, state) {
     const { clients } = props;
@@ -54,18 +61,17 @@ class Clients extends Component {
             <thead className="thead-inverse">
               <tr>
                 <th>Name</th>
-                <th>Email</th>
                 <th>Balance</th>
                 <th />
               </tr>
             </thead>
             <tbody>
               {clients.map(client => (
+                // {if (client.owner === ''){}}
                 <tr key={client.id}>
                   <td>
                     {client.firstName} {client.lastName}
                   </td>
-                  <td>{client.email}</td>
                   <td>${parseFloat(client.balance).toFixed(2)}</td>
                   <td>
                     <Link
@@ -89,12 +95,21 @@ class Clients extends Component {
 
 Clients.propTypes = {
   firestore: PropTypes.object.isRequired,
-  clients: PropTypes.array
+  clients: PropTypes.array,
 };
 
 export default compose(
-  firestoreConnect([{ collection: 'clients' }]),
+  firestoreConnect(),
   connect((state, props) => ({
-    clients: state.firestore.ordered.clients
-  }))
+    clients: state.firestore.ordered.clients,
+    uid: state.firebase.auth.uid,
+  })),
 )(Clients);
+
+// export default compose(
+//   firestoreConnect([{ collection: 'clients', where: ['owner', '==', ''] }]),
+//   connect((state, props) => ({
+//     clients: state.firestore.ordered.clients,
+//     uid: state.firebase.auth.uid,
+//   })),
+// )(Clients);

@@ -11,13 +11,13 @@ class AddClient extends Component {
     lastName: '',
     email: '',
     phone: '',
-    balance: ''
+    balance: '',
   };
 
   onSubmit = e => {
     e.preventDefault();
 
-    const newClient = this.state;
+    const newClient = { ...this.state, owner: this.props.uid };
 
     const { firestore, history } = this.props;
 
@@ -127,12 +127,13 @@ class AddClient extends Component {
 
 AddClient.propTypes = {
   firestore: PropTypes.object.isRequired,
-  settings: PropTypes.object.isRequired
+  settings: PropTypes.object.isRequired,
 };
 
 export default compose(
   firestoreConnect(),
-  connect((state, props) => ({
-    settings: state.settings
-  }))
+  connect(({ settings, firebase: { auth: { uid } } }, props) => ({
+    settings: settings,
+    uid: uid,
+  })),
 )(AddClient);
