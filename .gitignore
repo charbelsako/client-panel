@@ -10,7 +10,7 @@ firestore.indexes
 # dependencies
 /node_modules
 package-lock.json
-
+yarn.lock
 .vscode/
 
 # testing
