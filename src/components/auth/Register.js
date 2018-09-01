@@ -1,54 +1,65 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { firebaseConnect } from 'react-redux-firebase';
-import { notifyUser } from '../../actions/notifyActions';
-import Alert from '../layout/Alert';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { compose } from 'redux'
+import { connect } from 'react-redux'
+import { notifyUser } from '../../actions/notifyActions'
+import { firebaseConnect } from 'react-redux-firebase'
+import Alert from '../layout/Alert'
 
-class Login extends Component {
+class Register extends Component {
+  static propTypes = {
+    firebase: PropTypes.object.isRequired,
+    notify: PropTypes.object.isRequired,
+    notifyUser: PropTypes.func.isRequired,
+  }
+
   state = {
     email: '',
-    password: ''
-  };
+    password: '',
+  }
 
-  componentWillMount() {
-    const { allowRegistration } = this.props.settings;
-
-    if (!allowRegistration) {
-      this.props.history.push('/');
-    }
+  onChange = e => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    })
   }
 
   onSubmit = e => {
-    e.preventDefault();
+    e.preventDefault()
+    const { email, password } = this.state
+    const { firebase, notifyUser } = this.props
 
-    const { firebase, notifyUser } = this.props;
-    const { email, password } = this.state;
-
-    // Register with firebase
+    //Register User
     firebase
       .createUser({ email, password })
-      .catch(err => notifyUser('That User Already Exists', 'error'));
-  };
+      .catch(err => notifyUser('That user already exists', 'danger'))
+    // firebase
+    //   .login({ email, password })
+    //   .catch(err => notifyUser('invalid login', 'danger'))
+  }
 
-  onChange = e => this.setState({ [e.target.name]: e.target.value });
+  componentWillMount() {
+    const { allowRegistration } = this.props.settings
+    if (!allowRegistration) {
+      this.props.history.push('/')
+    }
+  }
 
   render() {
-    const { message, messageType } = this.props.notify;
+    const { message, messageType } = this.props.notify
     return (
       <div className="row">
-        <div className="col-md-6 mx-auto">
+        <div className="col-md-8 col-sm-12 col-xs-12 col-lg-6 mx-auto">
           <div className="card">
             <div className="card-body">
-              {message ? (
-                <Alert message={message} messageType={messageType} />
-              ) : null}
               <h1 className="text-center pb-4 pt-3">
                 <span className="text-primary">
                   <i className="fas fa-lock" /> Register
                 </span>
               </h1>
+              {message ? (
+                <Alert message={message} messageType={messageType} />
+              ) : null}
               <form onSubmit={this.onSubmit}>
                 <div className="form-group">
                   <label htmlFor="email">Email</label>
@@ -62,7 +73,7 @@ class Login extends Component {
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="password">Password</label>
+                  <label htmlFor="password">password</label>
                   <input
                     type="password"
                     className="form-control"
@@ -82,23 +93,17 @@ class Login extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-Login.propTypes = {
-  firebase: PropTypes.object.isRequired,
-  notify: PropTypes.object.isRequired,
-  notifyUser: PropTypes.func.isRequired
-};
-
 export default compose(
-  firebaseConnect(),
+  firebaseConnect({}),
   connect(
     (state, props) => ({
       notify: state.notify,
-      settings: state.settings
+      settings: state.settings,
     }),
-    { notifyUser }
-  )
-)(Login);
+    { notifyUser },
+  ),
+)(Register)

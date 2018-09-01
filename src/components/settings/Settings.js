@@ -1,57 +1,64 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 import {
   setAllowRegistration,
   setDisableBalanceOnAdd,
-  setDisableBalanceOnEdit
-} from '../../actions/settingsActions';
+  setDisableBalanceOnEdit,
+} from '../../actions/settingsActions'
 
 class Settings extends Component {
-  disableBalanceOnAddChange = () => {
-    const { setDisableBalanceOnAdd } = this.props;
-    setDisableBalanceOnAdd();
-  };
+  static propTypes = {
+    auth: PropTypes.object.isRequired,
+    settings: PropTypes.object.isRequired,
+    setDisableBalanceOnAdd: PropTypes.func.isRequired,
+    setDisableBalanceOnEdit: PropTypes.func.isRequired,
+    setAllowRegistration: PropTypes.func.isRequired,
+  }
 
-  disableBalanceOnEditChange = () => {
-    const { setDisableBalanceOnEdit } = this.props;
-    setDisableBalanceOnEdit();
-  };
+  allowRegistration = e => {
+    const { setAllowRegistration } = this.props
+    setAllowRegistration()
+  }
 
-  allowRegistrationChange = () => {
-    const { setAllowRegistration } = this.props;
-    setAllowRegistration();
-  };
+  disableBalanceOnAdd = e => {
+    const { setDisableBalanceOnAdd } = this.props
+    setDisableBalanceOnAdd()
+  }
+
+  disableBalanceOnEdit = e => {
+    const { setDisableBalanceOnEdit } = this.props
+    setDisableBalanceOnEdit()
+  }
 
   render() {
     const {
-      disableBalanceOnAdd,
       disableBalanceOnEdit,
-      allowRegistration
-    } = this.props.settings;
-
+      disableBalanceOnAdd,
+      allowRegistration,
+    } = this.props.settings
     return (
       <div>
         <div className="row">
           <div className="col-md-6">
             <Link to="/" className="btn btn-link">
-              <i className="fas fa-arrow-circle-left" /> Back To Dashboard
+              {' '}
+              <i className="fas fa-arrow-circle-left" /> Back to dashboard
             </Link>
           </div>
         </div>
-
         <div className="card">
           <div className="card-header">Edit Settings</div>
           <div className="card-body">
             <form>
               <div className="form-group">
-                <label>Allow Registration</label>{' '}
+                <label>Allow Registraion</label>{' '}
                 <input
                   type="checkbox"
                   name="allowRegistration"
                   checked={!!allowRegistration}
-                  onChange={this.allowRegistrationChange}
+                  onChange={this.allowRegistration}
                 />
               </div>
 
@@ -61,7 +68,7 @@ class Settings extends Component {
                   type="checkbox"
                   name="disableBalanceOnAdd"
                   checked={!!disableBalanceOnAdd}
-                  onChange={this.disableBalanceOnAddChange}
+                  onChange={this.disableBalanceOnAdd}
                 />
               </div>
 
@@ -71,28 +78,21 @@ class Settings extends Component {
                   type="checkbox"
                   name="disableBalanceOnEdit"
                   checked={!!disableBalanceOnEdit}
-                  onChange={this.disableBalanceOnEditChange}
+                  onChange={this.disableBalanceOnEdit}
                 />
               </div>
             </form>
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
-
-Settings.propTypes = {
-  settings: PropTypes.object.isRequired,
-  setDisableBalanceOnAdd: PropTypes.func.isRequired,
-  setDisableBalanceOnEdit: PropTypes.func.isRequired,
-  setAllowRegistration: PropTypes.func.isRequired
-};
 
 export default connect(
   (state, props) => ({
     auth: state.firebase.auth,
-    settings: state.settings
+    settings: state.settings,
   }),
-  { setAllowRegistration, setDisableBalanceOnAdd, setDisableBalanceOnEdit }
-)(Settings);
+  { setAllowRegistration, setDisableBalanceOnAdd, setDisableBalanceOnEdit },
+)(Settings)

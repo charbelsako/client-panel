@@ -8,18 +8,18 @@ import notifyReducer from './reducers/notifyReducer';
 import settingsReducer from './reducers/settingsReducer';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAj2cQpepAuQjR_BzjiXikbV2zACUF5vsY',
-  authDomain: 'reactclientpanel-61f9d.firebaseapp.com',
-  databaseURL: 'https://reactclientpanel-61f9d.firebaseio.com',
-  projectId: 'reactclientpanel-61f9d',
-  storageBucket: 'reactclientpanel-61f9d.appspot.com',
-  messagingSenderId: '485531386544'
+  apiKey: 'AIzaSyDpe-uIEia7SiyqbhGY-zGY_ydPqpijzoY',
+  authDomain: 'react-client-panel-1e6bd.firebaseapp.com',
+  databaseURL: 'https://react-client-panel-1e6bd.firebaseio.com',
+  projectId: 'react-client-panel-1e6bd',
+  storageBucket: 'react-client-panel-1e6bd.appspot.com',
+  messagingSenderId: '485531386544',
 };
 
 // react-redux-firebase config
 const rrfConfig = {
   userProfile: 'users',
-  useFirestoreForProfile: true // Firestore for Profile instead of Realtime DB
+  useFirestoreForProfile: true, // Firestore for Profile instead of Realtime DB
 };
 
 // Init firebase instance
@@ -32,14 +32,14 @@ firestore.settings(settings);
 // Add reactReduxFirebase enhancer when making store creator
 const createStoreWithFirebase = compose(
   reactReduxFirebase(firebase, rrfConfig), // firebase instance as first argument
-  reduxFirestore(firebase)
+  reduxFirestore(firebase),
 )(createStore);
 
 const rootReducer = combineReducers({
   firebase: firebaseReducer,
   firestore: firestoreReducer,
   notify: notifyReducer,
-  settings: settingsReducer
+  settings: settingsReducer,
 });
 
 // Check for settings in localStorage
@@ -48,7 +48,7 @@ if (localStorage.getItem('settings') == null) {
   const defaultSettings = {
     disableBalanceOnAdd: true,
     disableBalanceOnEdit: false,
-    allowRegistration: false
+    allowRegistration: false,
   };
 
   // Set to localStorage
@@ -64,8 +64,10 @@ const store = createStoreWithFirebase(
   initialState,
   compose(
     reactReduxFirebase(firebase),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-  )
+    window.__REDUX_DEVTOOLS_EXTENSION__
+      ? window.__REDUX_DEVTOOLS_EXTENSION__()
+      : f => f,
+  ),
 );
 
 export default store;
