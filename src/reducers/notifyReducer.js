@@ -1,9 +1,9 @@
-import { NOTIFY_USER } from "../actions/types"
+import { NOTIFY_USER } from '../actions/types';
 
 const initialState = {
   message: null,
-  messageType: null,
-}
+  messageType: null
+};
 
 export default function(state = initialState, action) {
   switch (action.type) {
@@ -11,9 +11,9 @@ export default function(state = initialState, action) {
       return {
         ...state,
         message: action.message,
-        messageType: action.messageType,
-      }
+        messageType: action.messageType
+      };
     default:
-      return state
+      return state;
   }
 }

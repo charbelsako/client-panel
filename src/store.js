@@ -8,12 +8,12 @@ import notifyReducer from './reducers/notifyReducer';
 import settingsReducer from './reducers/settingsReducer';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyDpe-uIEia7SiyqbhGY-zGY_ydPqpijzoY',
-  authDomain: 'react-client-panel-1e6bd.firebaseapp.com',
-  databaseURL: 'https://react-client-panel-1e6bd.firebaseio.com',
-  projectId: 'react-client-panel-1e6bd',
-  storageBucket: 'react-client-panel-1e6bd.appspot.com',
-  messagingSenderId: '248590649918',
+  apiKey: 'AIzaSyB0P5tcJB2car3m1pMS6AxDYeJDqY02doY',
+  authDomain: 'react-client-panel-afaa7.firebaseapp.com',
+  databaseURL: 'https://react-client-panel-afaa7.firebaseio.com',
+  projectId: 'react-client-panel-afaa7',
+  storageBucket: 'react-client-panel-afaa7.appspot.com',
+  messagingSenderId: '135730241089',
 };
 
 // react-redux-firebase config

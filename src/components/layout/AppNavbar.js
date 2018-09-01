@@ -1,55 +1,51 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
-import PropTypes from 'prop-types'
-import { compose } from 'redux'
-import { connect } from 'react-redux'
-import { firebaseConnect } from 'react-redux-firebase'
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { firebaseConnect } from 'react-redux-firebase';
 
 class AppNavbar extends Component {
-  static propTypes = {
-    firebase: PropTypes.object.isRequired,
-    auth: PropTypes.object.isRequired,
-  }
-
   state = {
-    isAuthenticated: false,
-  }
-
-  onLogoutClick = e => {
-    e.preventDefault()
-    this.props.firebase.logout()
-  }
+    isAuthenticated: false
+  };
 
   static getDerivedStateFromProps(props, state) {
-    const { auth } = props
+    const { auth } = props;
 
     if (auth.uid) {
-      return { isAuthenticated: true }
+      return { isAuthenticated: true };
     } else {
-      return { isAuthenticated: false }
+      return { isAuthenticated: false };
     }
   }
 
+  onLogoutClick = e => {
+    e.preventDefault();
+
+    const { firebase } = this.props;
+    firebase.logout();
+  };
+
   render() {
-    const { isAuthenticated } = this.state
-    const { auth } = this.props
-    const { allowRegistration } = this.props.settings
+    const { isAuthenticated } = this.state;
+    const { auth } = this.props;
+    const { allowRegistration } = this.props.settings;
+
     return (
       <nav className="navbar navbar-expand-md navbar-dark bg-primary mb-4">
         <div className="container">
           <Link to="/" className="navbar-brand">
-            Client Panel
+            ClientPanel
           </Link>
-          {isAuthenticated && (
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-toggle="collapse"
-              data-target="#navbarMain"
-            >
-              <span className="navbar-toggler-icon" />
-            </button>
-          )}
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarMain"
+          >
+            <span className="navbar-toggler-icon" />
+          </button>
           <div className="collapse navbar-collapse" id="navbarMain">
             <ul className="navbar-nav mr-auto">
               {isAuthenticated ? (
@@ -83,6 +79,7 @@ class AppNavbar extends Component {
                 </li>
               </ul>
             ) : null}
+
             {allowRegistration && !isAuthenticated ? (
               <ul className="navbar-nav ml-auto">
                 <li className="nav-item">
@@ -100,14 +97,20 @@ class AppNavbar extends Component {
           </div>
         </div>
       </nav>
-    )
+    );
   }
 }
+
+AppNavbar.propTypes = {
+  firebase: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired,
+  settings: PropTypes.object.isRequired
+};
 
 export default compose(
   firebaseConnect(),
   connect((state, props) => ({
     auth: state.firebase.auth,
-    settings: state.settings,
-  })),
-)(AppNavbar)
+    settings: state.settings
+  }))
+)(AppNavbar);

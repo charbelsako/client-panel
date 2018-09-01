@@ -1,54 +1,50 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-
-import classnames from 'classnames'
-import { Link } from 'react-router-dom'
-
-//For Firebase and Redux
-import { compose } from 'redux'
-import { connect } from 'react-redux'
-import { firestoreConnect } from 'react-redux-firebase'
-
-import Spinner from '../layout/Spinner'
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { firestoreConnect } from 'react-redux-firebase';
+import Spinner from '../layout/Spinner';
+import classnames from 'classnames';
 
 class ClientDetails extends Component {
-  static propTypes = {
-    firestore: PropTypes.object.isRequired,
-  }
-
   state = {
     showBalanceUpdate: false,
-    balanceUpdateAmount: '',
-  }
+    balanceUpdateAmount: ''
+  };
 
-  onChange = e => this.setState({ [e.target.name]: e.target.value })
-
+  // Update balance
   balanceSubmit = e => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const { client, firestore } = this.props
-    const { balanceUpdateAmount } = this.state
-    //What to update
+    const { client, firestore } = this.props;
+    const { balanceUpdateAmount } = this.state;
+
     const clientUpdate = {
-      balance: parseFloat(balanceUpdateAmount),
-    }
-    //update the database
-    firestore.update({ collection: 'clients', doc: client.id }, clientUpdate)
-  }
+      balance: parseFloat(balanceUpdateAmount)
+    };
 
+    // Update in firestore
+    firestore.update({ collection: 'clients', doc: client.id }, clientUpdate);
+  };
+
+  // Delete client
   onDeleteClick = () => {
-    //Add a toast as a notification
-    const { client, firestore, history } = this.props
+    const { client, firestore, history } = this.props;
+
     firestore
       .delete({ collection: 'clients', doc: client.id })
-      .then(history.push('/'))
-  }
+      .then(history.push('/'));
+  };
+
+  onChange = e => this.setState({ [e.target.name]: e.target.value });
 
   render() {
-    const { client } = this.props
-    const { showBalanceUpdate, balanceUpdateAmount } = this.state
+    const { client } = this.props;
+    const { showBalanceUpdate, balanceUpdateAmount } = this.state;
 
-    let balanceForm = ''
+    let balanceForm = '';
+    // If balance form should display
     if (showBalanceUpdate) {
       balanceForm = (
         <form onSubmit={this.balanceSubmit}>
@@ -57,7 +53,7 @@ class ClientDetails extends Component {
               type="text"
               className="form-control"
               name="balanceUpdateAmount"
-              placeholder="Enter Balance"
+              placeholder="Add New Balance"
               value={balanceUpdateAmount}
               onChange={this.onChange}
             />
@@ -70,21 +66,21 @@ class ClientDetails extends Component {
             </div>
           </div>
         </form>
-      )
+      );
     } else {
-      balanceForm = ''
+      balanceForm = null;
     }
 
     if (client) {
       return (
         <div>
           <div className="row">
-            <div className="col-md-6 col-sm-6 col-6">
+            <div className="col-md-6">
               <Link to="/" className="btn btn-link">
-                <i className="fas fa-arrow-circle-left" /> Back to Dashboard
+                <i className="fas fa-arrow-circle-left" /> Back To Dashboard
               </Link>
             </div>
-            <div className="col-md-6 col-sm-6 col-6">
+            <div className="col-md-6">
               <div className="btn-group float-right">
                 <Link to={`/client/edit/${client.id}`} className="btn btn-dark">
                   Edit
@@ -97,46 +93,45 @@ class ClientDetails extends Component {
           </div>
           <hr />
           <div className="card">
-            <div className="card-header">
-              {client.firstname} {client.lastname}
-            </div>
+            <h3 className="card-header">
+              {client.firstName} {client.lastName}
+            </h3>
             <div className="card-body">
               <div className="row">
-                <div className="col-md-8 col-sm-12 col-12">
-                  <h5>
+                <div className="col-md-8 col-sm-6">
+                  <h4>
                     Client ID:{' '}
                     <span className="text-secondary">{client.id}</span>
-                  </h5>
+                  </h4>
                 </div>
-                <div className="col-md-4 col-sm-12">
-                  <h4 className="pull-right">
-                    Balance:
+                <div className="col-md-4 col-sm-6">
+                  <h3 className="pull-right">
+                    Balance:{' '}
                     <span
                       className={classnames({
                         'text-danger': client.balance > 0,
-                        'text-success': Number(client.balance) === 0,
+                        'text-success': client.balance === 0
                       })}
                     >
-                      {' '}
-                      ${parseFloat(client.balance).toFixed(2)}{' '}
-                    </span>
+                      ${parseFloat(client.balance).toFixed(2)}
+                    </span>{' '}
                     <small>
                       <a
                         href="#!"
                         onClick={() =>
                           this.setState({
-                            showBalanceUpdate: !this.state.showBalanceUpdate,
+                            showBalanceUpdate: !this.state.showBalanceUpdate
                           })
                         }
                       >
                         <i className="fas fa-pencil-alt" />
                       </a>
                     </small>
-                  </h4>
-                  {/* BALANCE FORM */}
+                  </h3>
                   {balanceForm}
                 </div>
               </div>
+
               <hr />
               <ul className="list-group">
                 <li className="list-group-item">
@@ -149,18 +144,22 @@ class ClientDetails extends Component {
             </div>
           </div>
         </div>
-      )
+      );
     } else {
-      return <Spinner />
+      return <Spinner />;
     }
   }
 }
 
+ClientDetails.propTypes = {
+  firestore: PropTypes.object.isRequired
+};
+
 export default compose(
   firestoreConnect(props => [
-    { collection: 'clients', storeAs: 'client', doc: props.match.params.id },
+    { collection: 'clients', storeAs: 'client', doc: props.match.params.id }
   ]),
   connect(({ firestore: { ordered } }, props) => ({
-    client: ordered.client && ordered.client[0],
-  })),
-)(ClientDetails)
+    client: ordered.client && ordered.client[0]
+  }))
+)(ClientDetails);
