@@ -1,5 +1,11 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
+.firebase
+firebase.json
+firestore.rules
+.firebaserc
+firestore.indexes
+
 # dependencies
 /node_modules
 package-lock.json
