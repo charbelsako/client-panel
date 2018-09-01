@@ -12,7 +12,8 @@ class Clients extends Component {
   };
 
   componentDidMount() {
-    this.props.firestore.get({
+    const { firestore } = this.props;
+    firestore.get({
       collection: 'clients',
       where: ['owner', '==', this.props.uid],
     });
@@ -107,7 +108,7 @@ export default compose(
 )(Clients);
 
 // export default compose(
-//   firestoreConnect([{ collection: 'clients', where: ['owner', '==', ''] }]),
+//   firestoreConnect([{ collection: 'clients', where: ['owner', '==', ':id'] }]),
 //   connect((state, props) => ({
 //     clients: state.firestore.ordered.clients,
 //     uid: state.firebase.auth.uid,
