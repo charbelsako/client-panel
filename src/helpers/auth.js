@@ -1,8 +1,8 @@
-import locationHelperBuilder from 'redux-auth-wrapper/history4/locationHelper'
-import { connectedRouterRedirect } from 'redux-auth-wrapper/history4/redirect'
-import LoadingScreen from '../components/layout/Spinner'
+import locationHelperBuilder from 'redux-auth-wrapper/history4/locationHelper';
+import { connectedRouterRedirect } from 'redux-auth-wrapper/history4/redirect';
+import LoadingScreen from '../components/layout/Spinner';
 
-const locationHelper = locationHelperBuilder({})
+const locationHelper = locationHelperBuilder({});
 
 export const UserIsAuthenticated = connectedRouterRedirect({
   wrapperDisplayName: 'UserIsAuthenticated',
@@ -13,8 +13,8 @@ export const UserIsAuthenticated = connectedRouterRedirect({
   authenticatingSelector: ({ firebase: { auth, profile, isInitializing } }) =>
     !auth.isLoaded || isInitializing === true,
   authenticatedSelector: ({ firebase: { auth } }) =>
-    auth.isLoaded && !auth.isEmpty,
-})
+    auth.isLoaded && !auth.isEmpty
+});
 
 export const UserIsNotAuthenticated = connectedRouterRedirect({
   wrapperDisplayName: 'UserIsNotAuthenticated',
@@ -25,5 +25,5 @@ export const UserIsNotAuthenticated = connectedRouterRedirect({
   authenticatingSelector: ({ firebase: { auth, isInitializing } }) =>
     !auth.isLoaded || isInitializing === true,
   authenticatedSelector: ({ firebase: { auth } }) =>
-    auth.isLoaded && auth.isEmpty,
-})
+    auth.isLoaded && auth.isEmpty
+});
