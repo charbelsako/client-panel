@@ -42,15 +42,15 @@ class Clients extends Component {
       return (
         <div>
           <div className="row">
-            <div className="col-md-6">
-              <h2>
+            <div className="col-md-6 col-6">
+              <h3>
                 {' '}
                 <i className="fas fa-users" /> Clients{' '}
-              </h2>
+              </h3>
             </div>
-            <div className="col-md-6">
+            <div className="col-md-5 col-6">
               <h5 className="text-right text-secondary">
-                Total Owed{' '}
+                Total owed{' '}
                 <span className="text-primary">
                   ${parseFloat(totalOwed).toFixed(2)}
                 </span>

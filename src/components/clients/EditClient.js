@@ -31,7 +31,7 @@ class EditClient extends Component {
       balance:
         this.balanceInput.current.value === ''
           ? 0
-          : this.balanceInput.current.value
+          : this.balanceInput.current.value,
     };
 
     // Update client in firestore
@@ -138,15 +138,15 @@ class EditClient extends Component {
 }
 
 EditClient.propTypes = {
-  firestore: PropTypes.object.isRequired
+  firestore: PropTypes.object.isRequired,
 };
 
 export default compose(
   firestoreConnect(props => [
-    { collection: 'clients', storeAs: 'client', doc: props.match.params.id }
+    { collection: 'clients', storeAs: 'client', doc: props.match.params.id },
   ]),
   connect(({ firestore: { ordered }, settings }, props) => ({
     client: ordered.client && ordered.client[0],
-    settings
-  }))
+    settings,
+  })),
 )(EditClient);

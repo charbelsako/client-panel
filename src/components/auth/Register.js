@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { firebaseConnect } from 'react-redux-firebase';
+import { firebaseConnect, firestoreConnect } from 'react-redux-firebase';
 import { notifyUser } from '../../actions/notifyActions';
 import Alert from '../layout/Alert';
 
 class Login extends Component {
   state = {
     email: '',
-    password: ''
+    password: '',
   };
 
   componentWillMount() {
@@ -23,12 +23,36 @@ class Login extends Component {
   onSubmit = e => {
     e.preventDefault();
 
-    const { firebase, notifyUser } = this.props;
+    const { firebase, notifyUser, firestore } = this.props;
     const { email, password } = this.state;
 
     // Register with firebase
+    // And make a settings doc corresponding to that user
     firebase
-      .createUser({ email, password })
+      .createUser({ email, password, type: 'b' })
+      .then(doc => {
+        let id;
+        firestore
+          .get({
+            collection: 'users',
+            where: ['email', '==', doc.email],
+          })
+          .then(user => {
+            id = user.docs[0].id;
+            console.log(id);
+            firestore
+              .add(
+                { collection: 'settings' },
+                {
+                  disableBalanceOnAdd: false,
+                  disableBalanceOnEdit: false,
+                  uid: id,
+                },
+              )
+              .then(console.log('created the setting successfully'))
+              .catch(err => console.error(err));
+          });
+      })
       .catch(err => notifyUser('That User Already Exists', 'error'));
   };
 
@@ -89,16 +113,19 @@ class Login extends Component {
 Login.propTypes = {
   firebase: PropTypes.object.isRequired,
   notify: PropTypes.object.isRequired,
-  notifyUser: PropTypes.func.isRequired
+  notifyUser: PropTypes.func.isRequired,
+  firestore: PropTypes.object.isRequired,
 };
 
 export default compose(
   firebaseConnect(),
+  firestoreConnect(),
   connect(
     (state, props) => ({
+      uid: state.firebase.auth.uid,
       notify: state.notify,
-      settings: state.settings
+      settings: state.settings,
     }),
-    { notifyUser }
-  )
+    { notifyUser },
+  ),
 )(Login);

@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { firestoreConnect } from 'react-redux-firebase';
+import Spinner from '../layout/Spinner';
 
 class AddClient extends Component {
   state = {
@@ -13,6 +14,14 @@ class AddClient extends Component {
     phone: '',
     balance: '',
   };
+
+  componentDidMount() {
+    this.props.firestore.get({
+      collection: 'settings',
+      where: ['uid', '==', this.props.uid],
+      limit: 1,
+    });
+  }
 
   onSubmit = e => {
     e.preventDefault();
@@ -34,94 +43,102 @@ class AddClient extends Component {
   onChange = e => this.setState({ [e.target.name]: e.target.value });
 
   render() {
-    const { disableBalanceOnAdd } = this.props.settings;
+    if (this.props.settings) {
+      // const { disableBalanceOnAdd } = this.props.settings[
+      //   Object.keys(this.props.settings)
+      // ];
 
-    return (
-      <div>
-        <div className="row">
-          <div className="col-md-6">
-            <Link to="/" className="btn btn-link">
-              <i className="fas fa-arrow-circle-left" /> Back To Dashboard
-            </Link>
+      const { disableBalanceOnAdd } = this.props.settings;
+
+      return (
+        <div>
+          <div className="row">
+            <div className="col-md-6">
+              <Link to="/" className="btn btn-link">
+                <i className="fas fa-arrow-circle-left" /> Back To Dashboard
+              </Link>
+            </div>
+          </div>
+
+          <div className="card">
+            <div className="card-header">Add Client</div>
+            <div className="card-body">
+              <form onSubmit={this.onSubmit}>
+                <div className="form-group">
+                  <label htmlFor="firstName">First Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="firstName"
+                    minLength="2"
+                    required
+                    onChange={this.onChange}
+                    value={this.state.firstName}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="lastName">Last Name</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="lastName"
+                    minLength="2"
+                    required
+                    onChange={this.onChange}
+                    value={this.state.lastName}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="email">Email</label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    name="email"
+                    onChange={this.onChange}
+                    value={this.state.email}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="phone">Phone</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="phone"
+                    minLength="10"
+                    required
+                    onChange={this.onChange}
+                    value={this.state.phone}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="balance">Balance</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    name="balance"
+                    onChange={this.onChange}
+                    value={this.state.balance}
+                    disabled={disableBalanceOnAdd}
+                  />
+                </div>
+
+                <input
+                  type="submit"
+                  value="Submit"
+                  className="btn btn-primary btn-block"
+                />
+              </form>
+            </div>
           </div>
         </div>
-
-        <div className="card">
-          <div className="card-header">Add Client</div>
-          <div className="card-body">
-            <form onSubmit={this.onSubmit}>
-              <div className="form-group">
-                <label htmlFor="firstName">First Name</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="firstName"
-                  minLength="2"
-                  required
-                  onChange={this.onChange}
-                  value={this.state.firstName}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="lastName">Last Name</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="lastName"
-                  minLength="2"
-                  required
-                  onChange={this.onChange}
-                  value={this.state.lastName}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input
-                  type="email"
-                  className="form-control"
-                  name="email"
-                  onChange={this.onChange}
-                  value={this.state.email}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="phone">Phone</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="phone"
-                  minLength="10"
-                  required
-                  onChange={this.onChange}
-                  value={this.state.phone}
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="balance">Balance</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="balance"
-                  onChange={this.onChange}
-                  value={this.state.balance}
-                  disabled={disableBalanceOnAdd}
-                />
-              </div>
-
-              <input
-                type="submit"
-                value="Submit"
-                className="btn btn-primary btn-block"
-              />
-            </form>
-          </div>
-        </div>
-      </div>
-    );
+      );
+    } else {
+      return <Spinner />;
+    }
   }
 }
 
@@ -132,8 +149,9 @@ AddClient.propTypes = {
 
 export default compose(
   firestoreConnect(),
-  connect(({ settings, firebase: { auth: { uid } } }, props) => ({
-    settings: settings,
-    uid: uid,
+  connect((state, props) => ({
+    settings: state.settings,
+    // settings: state.firestore.data.settings,
+    uid: state.firebase.auth.uid,
   })),
 )(AddClient);
