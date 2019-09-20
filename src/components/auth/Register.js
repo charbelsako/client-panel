@@ -1,65 +1,65 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { firebaseConnect, firestoreConnect } from 'react-redux-firebase';
-import { notifyUser } from '../../actions/notifyActions';
-import Alert from '../layout/Alert';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import { compose } from 'redux'
+import { connect } from 'react-redux'
+import { firebaseConnect, firestoreConnect } from 'react-redux-firebase'
+import { notifyUser } from '../../actions/notifyActions'
+import Alert from '../layout/Alert'
 
-class Login extends Component {
+class Register extends Component {
   state = {
     email: '',
-    password: '',
-  };
+    password: ''
+  }
 
   componentWillMount() {
-    const { allowRegistration } = this.props.settings;
+    const { allowRegistration } = this.props.settings
 
     if (!allowRegistration) {
-      this.props.history.push('/');
+      this.props.history.push('/')
     }
   }
 
   onSubmit = e => {
-    e.preventDefault();
+    e.preventDefault()
 
-    const { firebase, notifyUser, firestore } = this.props;
-    const { email, password } = this.state;
+    const { firebase, notifyUser, firestore } = this.props
+    const { email, password } = this.state
 
     // Register with firebase
     // And make a settings doc corresponding to that user
     firebase
       .createUser({ email, password, type: 'b' })
       .then(doc => {
-        let id;
+        let id
         firestore
           .get({
             collection: 'users',
-            where: ['email', '==', doc.email],
+            where: ['email', '==', doc.email]
           })
           .then(user => {
-            id = user.docs[0].id;
-            console.log(id);
+            id = user.docs[0].id
+            console.log(id)
             firestore
               .add(
                 { collection: 'settings' },
                 {
                   disableBalanceOnAdd: false,
                   disableBalanceOnEdit: false,
-                  uid: id,
-                },
+                  uid: id
+                }
               )
               .then(console.log('created the setting successfully'))
-              .catch(err => console.error(err));
-          });
+              .catch(err => console.error(err))
+          })
       })
-      .catch(err => notifyUser('That User Already Exists', 'error'));
-  };
+      .catch(err => notifyUser('That User Already Exists', 'error'))
+  }
 
-  onChange = e => this.setState({ [e.target.name]: e.target.value });
+  onChange = e => this.setState({ [e.target.name]: e.target.value })
 
   render() {
-    const { message, messageType } = this.props.notify;
+    const { message, messageType } = this.props.notify
     return (
       <div className="row">
         <div className="col-md-6 mx-auto">
@@ -106,16 +106,16 @@ class Login extends Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-Login.propTypes = {
+Register.propTypes = {
   firebase: PropTypes.object.isRequired,
   notify: PropTypes.object.isRequired,
   notifyUser: PropTypes.func.isRequired,
-  firestore: PropTypes.object.isRequired,
-};
+  firestore: PropTypes.object.isRequired
+}
 
 export default compose(
   firebaseConnect(),
@@ -124,8 +124,8 @@ export default compose(
     (state, props) => ({
       uid: state.firebase.auth.uid,
       notify: state.notify,
-      settings: state.settings,
+      settings: state.settings
     }),
-    { notifyUser },
-  ),
-)(Login);
+    { notifyUser }
+  )
+)(Register)
