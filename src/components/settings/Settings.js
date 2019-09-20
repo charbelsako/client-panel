@@ -1,48 +1,43 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { compose } from 'redux';
-import { firestoreConnect } from 'react-redux-firebase';
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { compose } from 'redux'
+import { firestoreConnect } from 'react-redux-firebase'
 import {
   setAllowRegistration,
   setDisableBalanceOnAdd,
-  setDisableBalanceOnEdit,
-} from '../../actions/settingsActions';
-import Spinner from '../layout/Spinner';
+  setDisableBalanceOnEdit
+} from '../../actions/settingsActions'
+import Spinner from '../layout/Spinner'
 
 class Settings extends Component {
   componentDidMount() {
     this.props.firestore.get({
       collection: 'users',
-      where: ['email', '==', this.props.email],
-    });
+      where: ['email', '==', this.props.email]
+    })
   }
 
   disableBalanceOnAddChange = () => {
-    const { setDisableBalanceOnAdd } = this.props;
-    setDisableBalanceOnAdd();
-  };
+    const { setDisableBalanceOnAdd } = this.props
+    setDisableBalanceOnAdd()
+  }
 
   disableBalanceOnEditChange = () => {
-    const { setDisableBalanceOnEdit } = this.props;
-    setDisableBalanceOnEdit();
-  };
+    const { setDisableBalanceOnEdit } = this.props
+    setDisableBalanceOnEdit()
+  }
 
   allowRegistrationChange = () => {
-    const { setAllowRegistration } = this.props;
-    setAllowRegistration();
-  };
+    const { setAllowRegistration } = this.props
+    setAllowRegistration()
+  }
 
   render() {
-    const {
-      disableBalanceOnAdd,
-      disableBalanceOnEdit,
-      allowRegistration,
-    } = this.props.settings;
+    const { disableBalanceOnAdd, disableBalanceOnEdit } = this.props.settings
 
     if (this.props.users) {
-      const { type } = this.props.users[Object.keys(this.props.users)];
       return (
         <div>
           <div className="row">
@@ -57,18 +52,6 @@ class Settings extends Component {
             <div className="card-header">Edit Settings</div>
             <div className="card-body">
               <form>
-                {type === 'a' ? (
-                  <div className="form-group">
-                    <label>Allow Registration</label>{' '}
-                    <input
-                      type="checkbox"
-                      name="allowRegistration"
-                      checked={!!allowRegistration}
-                      onChange={this.allowRegistrationChange}
-                    />
-                  </div>
-                ) : null}
-
                 <div className="form-group">
                   <label>Disable Balance On Add</label>{' '}
                   <input
@@ -92,9 +75,9 @@ class Settings extends Component {
             </div>
           </div>
         </div>
-      );
+      )
     } else {
-      return <Spinner />;
+      return <Spinner />
     }
   }
 }
@@ -103,8 +86,8 @@ Settings.propTypes = {
   settings: PropTypes.object.isRequired,
   setDisableBalanceOnAdd: PropTypes.func.isRequired,
   setDisableBalanceOnEdit: PropTypes.func.isRequired,
-  setAllowRegistration: PropTypes.func.isRequired,
-};
+  setAllowRegistration: PropTypes.func.isRequired
+}
 
 export default compose(
   firestoreConnect(),
@@ -113,8 +96,8 @@ export default compose(
       auth: state.firebase.auth,
       email: state.firebase.auth.email,
       settings: state.settings,
-      users: state.firestore.ordered.users,
+      users: state.firestore.ordered.users
     }),
-    { setAllowRegistration, setDisableBalanceOnAdd, setDisableBalanceOnEdit },
-  ),
-)(Settings);
+    { setAllowRegistration, setDisableBalanceOnAdd, setDisableBalanceOnEdit }
+  )
+)(Settings)
